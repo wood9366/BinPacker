@@ -1,0 +1,5 @@
+*.swp
+res/o/
+res/sprites/
+bin/
+.DS_Store
