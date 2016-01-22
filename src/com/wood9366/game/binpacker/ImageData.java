@@ -13,7 +13,7 @@ public class ImageData {
 	}
 	
 	public Rect rect() {
-		return Rect.Create(0, 0, _image.getWidth(), _image.getHeight());
+		return Rect.Create(0, 0, _availableRect.width(), _availableRect.height());
 	}
 	
 	public String name() {
@@ -25,18 +25,105 @@ public class ImageData {
 	}
 	
 	public BufferedImage image() {
-		return _image;
+		BufferedImage image = null;
+		
+		try {
+			image = ImageIO.read(new File(_imagePath));
+			image = image.getSubimage(_availableRect.left(), _availableRect.top(), 
+					_availableRect.width(), _availableRect.height());
+		} catch (IOException e) {
+		}
+		
+		return image;
 	}
 	
 	private void load(String path) {
+		BufferedImage image = null;
+		
 		try {
-			_image = ImageIO.read(new File(path));
+			image = ImageIO.read(new File(path));
 			_imagePath = path;
 			_name = Paths.get(_imagePath).getFileName().toString();
+			_width = image.getWidth();
+			_height = image.getHeight();
+			_availableRect = Rect.Create(0, 0, _width, _height);
+			
 		} catch (IOException e) {}
+		
+		if (image != null) {
+			trim(image);
+		}
+	}
+	
+	private void trim(BufferedImage image) {
+		if (image.getRaster().getNumBands() >= 4) {
+			int left = image.getWidth();
+			
+			for (int y = 0; y < image.getHeight(); y++) {
+				for (int x = 0; x < image.getWidth(); x++) {
+					int a = image.getRGB(x, y) & 0xff00000;
+
+					if (a > 0) {
+						if (x < left) {
+							left = x;
+						}
+						break;
+					}
+				}
+			}
+			
+			int right = 0;
+			
+			for (int y = 0; y < image.getHeight(); y++) {
+				for (int x = image.getWidth() - 1; x >= left; x--) {
+					int a = image.getRGB(x, y) & 0xff00000;
+
+					if (a > 0) {
+						if (x > right) {
+							right = x;
+						}
+						break;
+					}
+				}
+			}
+			
+			int top = image.getHeight();
+			
+			for (int x = left; x <= right; x++) {
+				for (int y = 0; y < image.getHeight(); y++) {
+					int a = image.getRGB(x, y) & 0xff00000;
+
+					if (a > 0) {
+						if (y < top) {
+							top = y;
+						}
+						break;
+					}
+				}
+			}
+			
+			int bottom = 0;
+			
+			for (int x = left; x <= right; x++) {
+				for (int y = image.getHeight() - 1; y >= 0; y--) {
+					int a = image.getRGB(x, y) & 0xff00000;
+
+					if (a > 0) {
+						if (y > bottom) {
+							bottom = y;
+						}
+						break;
+					}
+				}
+			}
+			
+			_availableRect = Rect.CreateByEdge(left, top, right, bottom);
+		}
 	}
 	
 	private String _name = "";
 	private String _imagePath = "";
-	private BufferedImage _image = null;
+	private int _width = 0;
+	private int _height = 0;
+	private Rect _availableRect = null;
 }

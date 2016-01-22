@@ -1,7 +1,9 @@
 package com.wood9366.game.binpacker;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class BinPacker {
@@ -35,7 +37,7 @@ public class BinPacker {
 		}
 		
 		int minSize = 128;
-		int maxSize = 4096;
+		int maxSize = 2048;
 
 		totalArea *= 1.2f;
 		
@@ -57,9 +59,9 @@ public class BinPacker {
 			
 			System.out.println(String.format("%s %s", (isPack ? "o" : "x"), image.imagePath()));
 			
-			for (BinData bin : _bins) {
-				System.out.println(String.format(" bin %d, maxrects: %d", bin.no(), bin.maxRects().size()));
-			}
+//			for (BinData bin : _bins) {
+//				System.out.println(String.format(" bin %d, maxrects: %d", bin.no(), bin.maxRects().size()));
+//			}
 		}
 	}
 	
@@ -104,17 +106,55 @@ public class BinPacker {
 	private Set<BinData> _bins = new HashSet<BinData>();
 	private Set<ImageData> _images = new HashSet<ImageData>();
 	
-	public static void main(String[] args) {
-		BinPacker packer = new BinPacker();
+	public static void GatherPNGs(String dir, List<String> pngs) {
+		File d = new File(dir);
 		
-		for (int i = 0; i < 1000; i++) {
-			packer.addImage(new ImageData("res/sprites/" + Integer.toString(i) + ".png"));
+		if (d.exists()) {
+			for (File f : d.listFiles()) {
+				if (f.isDirectory()) {
+					GatherPNGs(f.toString(), pngs);
+				} else {
+					if (f.getName().endsWith(".png")) {
+						pngs.add(f.toPath().toString());
+					}
+				}
+			}
+		}
+	}
+	
+	public static void main(String[] args) {
+		if (args.length >= 2) {
+			if (new File(args[0]).exists() && new File(args[1]).exists()) {
+				BinPacker packer = new BinPacker();
+				
+				List<String> sprites = new ArrayList<String>();
+				
+				GatherPNGs(args[0], sprites);
+		
+				if (sprites.size() > 0) {
+					System.out.println("==> process input images");
+					
+					for (String sprite : sprites) {
+						packer.addImage(new ImageData(sprite));
+					}
+					
+					System.out.println("==> start packing");
+					packer.pack();
+					
+					System.out.println("==> export bin image and config data");
+					packer.export(args[1]);
+					
+					System.out.println("==> done");
+				} else {
+					System.out.println("no valid source image be found at specific path");
+				}
+			} else {
+				System.out.println("invalid source image path or output bin path");
+			}
+		} else {
+			System.out.println("BinPacker SourceImagePath OutputBinPath");
 		}
 		
-		System.out.println("==> start packing");
-		packer.pack();
-		System.out.println("==> export bin image and config data");
-		packer.export("res/");
-		System.out.println("==> done");
+
 	}
 }

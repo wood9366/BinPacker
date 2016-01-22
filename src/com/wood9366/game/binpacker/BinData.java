@@ -154,20 +154,7 @@ public class BinData {
 	private void copyImageRect(BufferedImage dest, int dx, int dy, BufferedImage src, int sx, int sy, int w, int h) {
 		for (int x = 0; x < w; x++) {
 			for (int y = 0; y < h; y++) {
-				if (src.getRaster().getNumBands() < 4 && dest.getRaster().getNumBands() >= 4) {
-					dest.getRaster().setSample(dx + x, dy + y, 3, 1);
-				}
-				
-				int numBands = Math.min(dest.getRaster().getNumBands(), src.getRaster().getNumBands());
-				
-				for (int b = 0; b < numBands; b++) {
-					dest.getRaster().setSample(dx + x, dy + y, b, src.getRaster().getSample(sx + x, sy + y, b));
-				}
-				
-				// correct alpha channel for source image which don't have alpha channel
-				if (src.getRaster().getNumBands() < 4 && dest.getRaster().getNumBands() >= 4) {
-					dest.getRaster().setSample(dx + x, dy + y, 3, 255);
-				}
+				dest.setRGB(dx + x, dy + y, src.getRGB(sx + x, sy + y));
 			}
 		}
 	}
