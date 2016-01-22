@@ -54,6 +54,7 @@ public class ImageData {
 	}
 	
 	private void load(String path) {
+		Profiler.Instance().begin("load image " + path);
 		BufferedImage image = null;
 		
 		try {
@@ -65,10 +66,13 @@ public class ImageData {
 			_availableRect = Rect.Create(0, 0, _width, _height);
 			
 		} catch (IOException e) {}
+		Profiler.Instance().end("load image " + path);
 		
+		Profiler.Instance().begin("trim image " + path);
 		if (image != null) {
 			trim(image);
 		}
+		Profiler.Instance().end("trim image " + path);
 	}
 	
 	private void trim(BufferedImage image) {
