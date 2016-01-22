@@ -66,8 +66,12 @@ public class BinData {
 	}
 	
 	public void export(String outputPath) {
+		Profiler.Instance().begin("export bin " + Integer.toString(no()) + " image");
 		exportImage(outputPath);
+		Profiler.Instance().end("export bin " + Integer.toString(no()) + " image");
+		Profiler.Instance().begin("export bin " + Integer.toString(no()) + " config");
 		exportConfig(outputPath);
+		Profiler.Instance().end("export bin " + Integer.toString(no()) + " config");
 	}
 	
 	@SuppressWarnings("unused")

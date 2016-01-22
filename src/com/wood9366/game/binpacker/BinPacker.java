@@ -22,7 +22,9 @@ public class BinPacker {
 	public void export(String outputPath) {
 		if (new File(outputPath).exists()) {
 			for (BinData bin : _bins) {
+				Profiler.Instance().begin("export bin " + Integer.toString(bin.no()));
 				bin.export(outputPath);
+				Profiler.Instance().end("export bin " + Integer.toString(bin.no()));
 			}
 		} else {
 			System.out.println(" output path [" + outputPath + "] don't exist");
@@ -129,6 +131,8 @@ public class BinPacker {
 	}
 	
 	public static void main(String[] args) {
+		//Profiler.Instance().on();
+		
 		if (args.length >= 2) {
 			if (new File(args[0]).exists() && new File(args[1]).exists()) {
 				BinPacker packer = new BinPacker();
@@ -138,18 +142,28 @@ public class BinPacker {
 				GatherPNGs(args[0], sprites);
 		
 				if (sprites.size() > 0) {
-					System.out.println("==> process input images");
+					Profiler.Instance().begin("total");
 					
+					System.out.println("==> process input images");
+					Profiler.Instance().begin("process images");
 					for (String sprite : sprites) {
+						Profiler.Instance().begin("process image " + sprite);
 						packer.addImage(new ImageData(sprite));
+						Profiler.Instance().end("process image " + sprite);
 					}
+					Profiler.Instance().end("process images");
 					
 					System.out.println("==> start packing");
+					Profiler.Instance().begin("packing");
 					packer.pack();
+					Profiler.Instance().end("packing");
 					
 					System.out.println("==> export bin image and config data");
+					Profiler.Instance().begin("exporting");
 					packer.export(args[1]);
+					Profiler.Instance().end("exporting");
 					
+					Profiler.Instance().end("total");
 					System.out.println("==> done");
 				} else {
 					System.out.println("no valid source image be found at specific path");
