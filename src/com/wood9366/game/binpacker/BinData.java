@@ -99,7 +99,8 @@ public class BinData {
 		BufferedImage image = new BufferedImage(width(), height(), BufferedImage.TYPE_INT_ARGB);
 		
 		for (PackImageData img : _packedImages) {
-			copyImageRect(image, img.rect().left(), img.rect().top(), img.image().image());
+			copyImageRect(image, img.rect().left() + img.image().border(), img.rect().top() + img.image().border(), 
+					img.image().image());
 		}
 		
 //		drawLeftMaxRects(image);

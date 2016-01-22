@@ -12,8 +12,12 @@ public class ImageData {
 		load(path);
 	}
 	
+	public int border() {
+		return 1;
+	}
+	
 	public Rect rect() {
-		return Rect.Create(0, 0, _availableRect.width(), _availableRect.height());
+		return Rect.Create(0, 0, _availableRect.width() + border() * 2, _availableRect.height() + border() * 2);
 	}
 	
 	public Rect rectAvailable() {
