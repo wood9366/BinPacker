@@ -16,6 +16,8 @@ import java.util.Set;
 
 import javax.imageio.ImageIO;
 
+import org.json.JSONObject;
+
 public class BinData {
 	class PackImageData {
 		public PackImageData(ImageData image, Rect rect) {
@@ -89,6 +91,10 @@ public class BinData {
 		}
 	}
 	
+	private String name() {
+		return "sprite" + Integer.toString(_no);
+	}
+	
 	private void exportImage(String outputPath) {
 		BufferedImage image = new BufferedImage(width(), height(), BufferedImage.TYPE_INT_ARGB);
 		
@@ -98,7 +104,7 @@ public class BinData {
 		
 //		drawLeftMaxRects(image);
 		
-		Path imagePath = Paths.get(outputPath, String.format("bin%d.png", _no));
+		Path imagePath = Paths.get(outputPath, name() + ".png");
 		
 		try {
 			ImageIO.write(image, "png", new File(imagePath.toString()));
@@ -108,32 +114,52 @@ public class BinData {
 	}
 	
 	private void exportConfig(String outputPath) {
-		StringBuilder s = new StringBuilder();
+		JSONObject frames = new JSONObject();
 		
-		s.append("[\n");
-		
-		for (int i = 0; i < _packedImages.size(); i++) {
-			PackImageData img = _packedImages.get(i);
+		for (PackImageData img : _packedImages) {
+			JSONObject rect = new JSONObject();
+			rect.put("x", img.rect().left());
+			rect.put("y", img.rect().top());
+			rect.put("w", img.rect().width());
+			rect.put("h", img.rect().height());
 			
-			s.append(String.format("{ name: \"%s\", x: %d, y: %d, w: %d, h: %d }",
-					img.image().name(), img.rect().left(), img.rect().top(), img.rect().width(), img.rect().height()));
+			JSONObject availableRect = new JSONObject();
+			availableRect.put("x", img.image().rectAvailable().left());
+			availableRect.put("y", img.image().rectAvailable().top());
+			availableRect.put("w", img.image().rectAvailable().width());
+			availableRect.put("h", img.image().rectAvailable().height());
 			
-			if (i < _packedImages.size() - 1) {
-				s.append(",");
-			}
+			JSONObject sourceSize = new JSONObject();
+			sourceSize.put("w", img.image().width());
+			sourceSize.put("h", img.image().height());
 			
-			s.append("\n");
+			JSONObject frame = new JSONObject();
+			frame.put("frame", rect);
+			frame.put("spriteSourceSize", availableRect);
+			frame.put("sourceSize", sourceSize);
+			
+			frames.put(img.image().name(), frame);
 		}
 		
-		s.append("]\n");
+		JSONObject size = new JSONObject();
+		size.put("w", width());
+		size.put("h", height());
 		
-		Path configPath = Paths.get(outputPath, String.format("bin%d.txt", _no));
+		JSONObject meta = new JSONObject();
+		meta.put("image", name() + ".png");
+		meta.put("size", size);
+		
+		JSONObject config = new JSONObject();
+		config.put("frames", frames);
+		config.put("meta", meta);
+		
+		Path configPath = Paths.get(outputPath, name() + ".json");
 		
 		BufferedWriter o = null;
 		
 		try {
 			o = new BufferedWriter(new FileWriter(configPath.toString()));
-			o.write(s.toString());
+			o.write(config.toString(4));
 			o.close();
 		} catch (IOException e) {
 			System.out.println(e.toString());

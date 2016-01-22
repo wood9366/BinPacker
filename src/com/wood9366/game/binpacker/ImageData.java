@@ -16,6 +16,18 @@ public class ImageData {
 		return Rect.Create(0, 0, _availableRect.width(), _availableRect.height());
 	}
 	
+	public Rect rectAvailable() {
+		return _availableRect;
+	}
+	
+	public int width() {
+		return _width;
+	}
+	
+	public int height() {
+		return _height;
+	}
+	
 	public String name() {
 		return _name;
 	}

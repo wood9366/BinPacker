@@ -57,7 +57,9 @@ public class BinPacker {
 		if (findBestMaxRect(image.rect())) {
 			boolean isPack = _bestBin.pack(_bestMaxRect, image);
 			
-			System.out.println(String.format("%s %s", (isPack ? "o" : "x"), image.imagePath()));
+			if (!isPack) {
+				System.out.println(String.format("%s %s", (isPack ? "o" : "x"), image.imagePath()));
+			}
 			
 //			for (BinData bin : _bins) {
 //				System.out.println(String.format(" bin %d, maxrects: %d", bin.no(), bin.maxRects().size()));
