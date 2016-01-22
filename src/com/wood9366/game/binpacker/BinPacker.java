@@ -1,22 +1,33 @@
 package com.wood9366.game.binpacker;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class BinPacker {
+	public Set<BinData> bins() {
+		return _bins;
+	}
+	
 	public void addImage(ImageData image) {
 		_images.add(image);
 	}
 	
-	public void pack() {
+	public int pack() {
+		int numPacked = 0;
+		
 		calcualteNumberOfBinAndSize();
 		
 		for (ImageData image : _images) {
-			packImage(image);
+			if (packImage(image)) {
+				numPacked++;
+			}
 		}
+		
+		return numPacked;
 	}
 	
 	public void export(String outputPath) {
@@ -55,18 +66,18 @@ public class BinPacker {
 		}
 	}
 	
-	private void packImage(ImageData image) {
+	private boolean packImage(ImageData image) {
+		boolean isPack = false; 
+		
 		if (findBestMaxRect(image.rect())) {
-			boolean isPack = _bestBin.pack(_bestMaxRect, image);
+			isPack = _bestBin.pack(_bestMaxRect, image);
 			
 			if (!isPack) {
 				System.out.println(String.format("%s %s", (isPack ? "o" : "x"), image.imagePath()));
 			}
-			
-//			for (BinData bin : _bins) {
-//				System.out.println(String.format(" bin %d, maxrects: %d", bin.no(), bin.maxRects().size()));
-//			}
 		}
+		
+		return isPack;
 	}
 	
 	private boolean findBestMaxRect(Rect rect) {
@@ -131,15 +142,18 @@ public class BinPacker {
 	}
 	
 	public static void main(String[] args) {
-		//Profiler.Instance().on();
+//		Profiler.Instance().on();
 		
 		if (args.length >= 2) {
-			if (new File(args[0]).exists() && new File(args[1]).exists()) {
+			String srcPath = Paths.get(args[0]).toAbsolutePath().toString();
+			String destPath = Paths.get(args[1]).toAbsolutePath().toString();
+			
+			if (new File(srcPath).exists() && new File(destPath).exists()) {
 				BinPacker packer = new BinPacker();
 				
 				List<String> sprites = new ArrayList<String>();
 				
-				GatherPNGs(args[0], sprites);
+				GatherPNGs(srcPath, sprites);
 		
 				if (sprites.size() > 0) {
 					Profiler.Instance().begin("total");
@@ -155,21 +169,29 @@ public class BinPacker {
 					
 					System.out.println("==> start packing");
 					Profiler.Instance().begin("packing");
-					packer.pack();
+					int numPacked = packer.pack();
 					Profiler.Instance().end("packing");
 					
 					System.out.println("==> export bin image and config data");
 					Profiler.Instance().begin("exporting");
-					packer.export(args[1]);
+					packer.export(destPath);
 					Profiler.Instance().end("exporting");
 					
 					Profiler.Instance().end("total");
 					System.out.println("==> done");
+					
+					System.out.println("==> summary");
+					System.out.println(String.format("pack %d/%d images totally from %s", 
+							numPacked, sprites.size(), srcPath));
+					System.out.println(String.format("output %d bins into %s", packer.bins().size(), destPath));
+					for (BinData bin : packer.bins()) {
+						System.out.println(String.format("  %s: %d x %d", bin.no(), bin.width(), bin.height()));
+					}
 				} else {
 					System.out.println("no valid source image be found at specific path");
 				}
 			} else {
-				System.out.println("invalid source image path or output bin path");
+				System.out.println("invalid source image path [" + srcPath + "] or output bin path [" + destPath + "]");
 			}
 		} else {
 			System.out.println("BinPacker SourceImagePath OutputBinPath");
