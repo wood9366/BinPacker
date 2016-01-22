@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
@@ -51,19 +52,9 @@ public class BinData {
 			Rect packedRect = packInMaxRect(maxrect, image.rect());
 			
 			if (packedRect != null) {
-//				System.out.println("----------------------------------------------");
-//				for (Rect r : _maxrects) {
-//					System.out.println(String.format("%d, %d, %d, %d", r.left(), r.top(), r.width(), r.height()));
-//				}
-				
 				isPack = true;
 				calcualteMaxRectsAfterPack(packedRect);
 				_packedImages.add(new PackImageData(image, packedRect));
-
-//				System.out.println(String.format("pack %s to %d,%d,%d,%d", image.name(), packedRect.left(), packedRect.top(), packedRect.width(), packedRect.height()));
-//				for (Rect r : _maxrects) {
-//					System.out.println(String.format("%d, %d, %d, %d", r.left(), r.top(), r.width(), r.height()));
-//				}
 			}
 		} else {
 			System.out.println("incorrect maxrect");
@@ -77,12 +68,35 @@ public class BinData {
 		exportConfig(outputPath);
 	}
 	
+	@SuppressWarnings("unused")
+	private void drawLeftMaxRects(BufferedImage image) {
+		Random rand = new Random();
+		
+		for (Rect r : _maxrects) {
+			int c = 0xff << 24 | rand.nextInt(256) << 16 | rand.nextInt(256) << 8 | rand.nextInt(256);
+			
+			for (int y = r.top(); y <= r.bottom() - 1; y++) {
+				boolean isYEdge = (y > r.top() && y <= r.top() + 2) || (y < r.bottom() && y >= r.bottom() - 2);
+				
+				for (int x = r.left(); x <= r.right() - 1; x++) {
+					boolean isXEdge = (x > r.left() && x <= r.left() + 2) || (x < r.right() && x >= r.right() - 2);
+					
+					if (isYEdge || isXEdge) {
+						image.setRGB(x, y, c);
+					}
+				}
+			}
+		}
+	}
+	
 	private void exportImage(String outputPath) {
 		BufferedImage image = new BufferedImage(width(), height(), BufferedImage.TYPE_INT_ARGB);
 		
 		for (PackImageData img : _packedImages) {
 			copyImageRect(image, img.rect().left(), img.rect().top(), img.image().image());
 		}
+		
+//		drawLeftMaxRects(image);
 		
 		Path imagePath = Paths.get(outputPath, String.format("bin%d.png", _no));
 		
@@ -147,6 +161,7 @@ public class BinData {
 		copyImageRect(dest, dx, dy, src, 0, 0, src.getWidth(), src.getHeight());
 	}
 	
+	@SuppressWarnings("unused")
 	private void copyImageRect(BufferedImage dest, int dx, int dy, BufferedImage src, int sx, int sy) {
 		copyImageRect(dest, dx, dy, src, sx, sy, src.getWidth(), src.getHeight());
 	}

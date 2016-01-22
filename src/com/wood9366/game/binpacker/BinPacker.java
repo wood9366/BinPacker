@@ -90,6 +90,10 @@ public class BinPacker {
 					}
 				}
 			}
+			
+			if (isFind) {
+				break;
+			}
 		}
 		
 		return isFind;
