@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="GBK" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <jardesc>
     <jar path="BinPacker/bin/BinPacker.jar"/>
     <options buildIfNeeded="true" compress="true" descriptionLocation="/BinPacker/BinPackerJar.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="true" overwrite="true" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
