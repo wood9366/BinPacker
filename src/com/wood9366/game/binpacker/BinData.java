@@ -20,12 +20,12 @@ import org.json.JSONObject;
 
 public class BinData {
 	class PackImageData {
-		public PackImageData(ImageData image, Rect rect) {
+		public PackImageData(ISpriteData image, Rect rect) {
 			_image = image;
 			_rect = rect;
 		}
 		
-		public ImageData image() {
+		public ISpriteData image() {
 			return _image;
 		}
 		
@@ -33,7 +33,7 @@ public class BinData {
 			return _rect;
 		}
 		
-		private ImageData _image = null;
+		private ISpriteData _image = null;
 		private Rect _rect = null;
 	}
 	
@@ -54,7 +54,7 @@ public class BinData {
 		return _maxrects;
 	}
 	
-	public boolean pack(Rect maxrect, ImageData image) {
+	public boolean pack(Rect maxrect, ISpriteData image) {
 		boolean isPack = false;
 		
 		if (_maxrects.contains(maxrect)) {

@@ -7,39 +7,47 @@ import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
 
-public class ImageData {
+public class ImageData implements ISpriteData {
 	public ImageData(String path) {
 		load(path);
 	}
 	
+	@Override
 	public int border() {
 		return 1;
 	}
 	
+	@Override
 	public Rect rect() {
 		return Rect.Create(0, 0, _rectContent.width() + border() * 2, _rectContent.height() + border() * 2);
 	}
 	
+	@Override
 	public Rect rectContent() {
 		return _rectContent;
 	}
 	
+	@Override
 	public int width() {
 		return _width;
 	}
 	
+	@Override
 	public int height() {
 		return _height;
 	}
 	
+	@Override
 	public String name() {
 		return _name;
 	}
 	
-	public String path() {
+	@Override
+	public String info() {
 		return _path;
 	}
 	
+	@Override
 	public BufferedImage image() {
 		BufferedImage image = null;
 		
