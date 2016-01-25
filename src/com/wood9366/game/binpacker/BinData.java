@@ -229,8 +229,8 @@ public class BinData {
 		}
 	}
 	
-	private Set<Rect> leftMaxRectsAfterPack(Rect maxrect, Rect rect) {
-		Set<Rect> rects = new HashSet<Rect>();
+	private List<Rect> leftMaxRectsAfterPack(Rect maxrect, Rect rect) {
+		List<Rect> rects = new ArrayList<Rect>();
 		
 		if (maxrect.intersect(rect)) {
 			if (rect.left() <= maxrect.left() && rect.right() > maxrect.left() && rect.right() < maxrect.right()) {
