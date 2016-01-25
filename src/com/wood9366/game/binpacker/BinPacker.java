@@ -33,9 +33,9 @@ public class BinPacker {
 	public void export(String outputPath) {
 		if (new File(outputPath).exists()) {
 			for (BinData bin : _bins) {
-				Profiler.Instance().begin("export bin " + Integer.toString(bin.no()));
+				Profiler.Instance().begin("export bin " + Integer.toString(bin.id()));
 				bin.export(outputPath);
-				Profiler.Instance().end("export bin " + Integer.toString(bin.no()));
+				Profiler.Instance().end("export bin " + Integer.toString(bin.id()));
 			}
 		} else {
 			System.out.println(" output path [" + outputPath + "] don't exist");
@@ -185,7 +185,7 @@ public class BinPacker {
 							numPacked, sprites.size(), srcPath));
 					System.out.println(String.format("output %d bins into %s", packer.bins().size(), destPath));
 					for (BinData bin : packer.bins()) {
-						System.out.println(String.format("  %s: %d x %d", bin.no(), bin.width(), bin.height()));
+						System.out.println(String.format("  %s: %d x %d", bin.id(), bin.width(), bin.height()));
 					}
 				} else {
 					System.out.println("no valid source image be found at specific path");

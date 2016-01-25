@@ -37,8 +37,8 @@ public class BinData {
 		private Rect _rect = null;
 	}
 	
-	public BinData(int no, int width, int height) {
-		_no = no;
+	public BinData(int id, int width, int height) {
+		_id = id;
 		_width = width;
 		_height = height;
 		
@@ -46,7 +46,7 @@ public class BinData {
 		_maxrects.add(Rect.Create(0, 0, width(), height()));
 	}
 	
-	public int no() { return _no; }
+	public int id() { return _id; }
 	public int width() { return _width; }
 	public int height() { return _height; }
 
@@ -73,12 +73,12 @@ public class BinData {
 	}
 	
 	public void export(String outputPath) {
-		Profiler.Instance().begin("export bin " + Integer.toString(no()) + " image");
+		Profiler.Instance().begin("export bin " + Integer.toString(id()) + " image");
 		exportImage(outputPath);
-		Profiler.Instance().end("export bin " + Integer.toString(no()) + " image");
-		Profiler.Instance().begin("export bin " + Integer.toString(no()) + " config");
+		Profiler.Instance().end("export bin " + Integer.toString(id()) + " image");
+		Profiler.Instance().begin("export bin " + Integer.toString(id()) + " config");
 		exportConfig(outputPath);
-		Profiler.Instance().end("export bin " + Integer.toString(no()) + " config");
+		Profiler.Instance().end("export bin " + Integer.toString(id()) + " config");
 	}
 	
 	@SuppressWarnings("unused")
@@ -103,7 +103,7 @@ public class BinData {
 	}
 	
 	private String name() {
-		return "sprite" + Integer.toString(_no);
+		return "sprite" + Integer.toString(_id);
 	}
 	
 	private void exportImage(String outputPath) {
@@ -328,7 +328,7 @@ public class BinData {
 	private List<PackImageData> _packedImages = new ArrayList<PackImageData>();
 	private List<Rect> _maxrects = new ArrayList<Rect>();
 
-	private int _no = 0;
+	private int _id = 0;
 	private int _width = 0;
 	private int _height = 0;
 }
