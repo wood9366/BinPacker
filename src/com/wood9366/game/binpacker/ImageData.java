@@ -17,11 +17,11 @@ public class ImageData {
 	}
 	
 	public Rect rect() {
-		return Rect.Create(0, 0, _availableRect.width() + border() * 2, _availableRect.height() + border() * 2);
+		return Rect.Create(0, 0, _rectContent.width() + border() * 2, _rectContent.height() + border() * 2);
 	}
 	
-	public Rect rectAvailable() {
-		return _availableRect;
+	public Rect rectContent() {
+		return _rectContent;
 	}
 	
 	public int width() {
@@ -36,17 +36,17 @@ public class ImageData {
 		return _name;
 	}
 	
-	public String imagePath() {
-		return _imagePath;
+	public String path() {
+		return _path;
 	}
 	
 	public BufferedImage image() {
 		BufferedImage image = null;
 		
 		try {
-			image = ImageIO.read(new File(_imagePath));
-			image = image.getSubimage(_availableRect.left(), _availableRect.top(), 
-					_availableRect.width(), _availableRect.height());
+			image = ImageIO.read(new File(_path));
+			image = image.getSubimage(_rectContent.left(), _rectContent.top(), 
+					_rectContent.width(), _rectContent.height());
 		} catch (IOException e) {
 		}
 		
@@ -59,11 +59,11 @@ public class ImageData {
 		
 		try {
 			image = ImageIO.read(new File(path));
-			_imagePath = path;
-			_name = Paths.get(_imagePath).getFileName().toString();
+			_path = path;
+			_name = Paths.get(_path).getFileName().toString();
 			_width = image.getWidth();
 			_height = image.getHeight();
-			_availableRect = Rect.Create(0, 0, _width, _height);
+			_rectContent = Rect.Create(0, 0, _width, _height);
 			
 		} catch (IOException e) {}
 		Profiler.Instance().end("load image " + path);
@@ -137,13 +137,13 @@ public class ImageData {
 				}
 			}
 			
-			_availableRect = Rect.CreateByEdge(left, top, right, bottom);
+			_rectContent = Rect.CreateByEdge(left, top, right, bottom);
 		}
 	}
 	
 	private String _name = "";
-	private String _imagePath = "";
+	private String _path = "";
 	private int _width = 0;
 	private int _height = 0;
-	private Rect _availableRect = null;
+	private Rect _rectContent = null;
 }

@@ -73,7 +73,7 @@ public class BinPacker {
 			isPack = _bestBin.pack(_bestMaxRect, image);
 			
 			if (!isPack) {
-				System.out.println(String.format("%s %s", (isPack ? "o" : "x"), image.imagePath()));
+				System.out.println(String.format("%s %s", (isPack ? "o" : "x"), image.path()));
 			}
 		}
 		

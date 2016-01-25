@@ -136,10 +136,10 @@ public class BinData {
 			rect.put("h", img.rect().height());
 			
 			JSONObject availableRect = new JSONObject();
-			availableRect.put("x", img.image().rectAvailable().left());
-			availableRect.put("y", img.image().rectAvailable().top());
-			availableRect.put("w", img.image().rectAvailable().width());
-			availableRect.put("h", img.image().rectAvailable().height());
+			availableRect.put("x", img.image().rectContent().left());
+			availableRect.put("y", img.image().rectContent().top());
+			availableRect.put("w", img.image().rectContent().width());
+			availableRect.put("h", img.image().rectContent().height());
 			
 			JSONObject sourceSize = new JSONObject();
 			sourceSize.put("w", img.image().width());
