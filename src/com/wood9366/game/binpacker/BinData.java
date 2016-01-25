@@ -39,13 +39,20 @@ public class BinData {
 	
 	public BinData(int no, int width, int height) {
 		_no = no;
-		changeSize(width, height);
-		addRect(Rect.Create(0, 0, width(), height()));
+		_width = width;
+		_height = height;
+		
+		_maxrects.clear();
+		_maxrects.add(Rect.Create(0, 0, width(), height()));
 	}
 	
 	public int no() { return _no; }
 	public int width() { return _width; }
 	public int height() { return _height; }
+
+	public List<Rect> maxRects() {
+		return _maxrects;
+	}
 	
 	public boolean pack(Rect maxrect, ImageData image) {
 		boolean isPack = false;
@@ -103,7 +110,7 @@ public class BinData {
 		BufferedImage image = new BufferedImage(width(), height(), BufferedImage.TYPE_INT_ARGB);
 		
 		for (PackImageData img : _packedImages) {
-			copyImageRect(image, img.rect().left() + img.image().border(), img.rect().top() + img.image().border(), 
+			Utils.copyImageRect(image, img.rect().left() + img.image().border(), img.rect().top() + img.image().border(), 
 					img.image().image());
 		}
 		
@@ -171,40 +178,6 @@ public class BinData {
 		}
 	}
 	
-	void changeSize(int width, int height) {
-		_width = width;
-		_height = height;
-	}
-	
-	public void removeRect(Rect rect) {
-		_maxrects.remove(rect);
-	}
-	
-	public void addRect(Rect rect) {
-		_maxrects.add(rect);
-	}
-	
-	public List<Rect> maxRects() {
-		return _maxrects;
-	}
-	
-	private void copyImageRect(BufferedImage dest, int dx, int dy, BufferedImage src) {
-		copyImageRect(dest, dx, dy, src, 0, 0, src.getWidth(), src.getHeight());
-	}
-	
-	@SuppressWarnings("unused")
-	private void copyImageRect(BufferedImage dest, int dx, int dy, BufferedImage src, int sx, int sy) {
-		copyImageRect(dest, dx, dy, src, sx, sy, src.getWidth(), src.getHeight());
-	}
-	
-	private void copyImageRect(BufferedImage dest, int dx, int dy, BufferedImage src, int sx, int sy, int w, int h) {
-		for (int x = 0; x < w; x++) {
-			for (int y = 0; y < h; y++) {
-				dest.setRGB(dx + x, dy + y, src.getRGB(sx + x, sy + y));
-			}
-		}
-	}
-	
 	private Rect packInMaxRect(Rect maxrect, Rect rect) {
 		Rect ret = null;
 		
@@ -222,6 +195,8 @@ public class BinData {
 	private void calcualteMaxRectsAfterPack(Rect rect) {
 		List<Rect> addlist = new ArrayList<Rect>();
 		
+		// check every maxrect which intersect with packed rect.
+		// if intersect, remove original one and calculate left max rects.
 		for (int i = _maxrects.size() - 1; i >= 0; i--) {
 			Rect maxrect = _maxrects.get(i);
 			
@@ -235,7 +210,7 @@ public class BinData {
 		
 		Set<Integer> removeset = new HashSet<Integer>();
 		
-		// check and remove overlap rect
+		// check and remove rect includes by others
 		for (int i = 0; i < _maxrects.size() - 1; i++) {
 			for (int j = i + 1; j < _maxrects.size(); j++) {
 				if (_maxrects.get(i).include(_maxrects.get(j))) {
