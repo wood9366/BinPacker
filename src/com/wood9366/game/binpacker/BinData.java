@@ -54,6 +54,17 @@ public class BinData {
 		return _maxrects;
 	}
 	
+	public BufferedImage packedImage() {
+		BufferedImage image = new BufferedImage(width(), height(), BufferedImage.TYPE_INT_ARGB);
+		
+		for (PackImageData img : _packedImages) {
+			Utils.copyImageRect(image, img.rect().left() + img.image().border(), img.rect().top() + img.image().border(), 
+					img.image().image());
+		}
+		
+		return image;
+	}
+	
 	public boolean pack(Rect maxrect, ISpriteData image) {
 		boolean isPack = false;
 		
@@ -107,12 +118,7 @@ public class BinData {
 	}
 	
 	private void exportImage(String outputPath) {
-		BufferedImage image = new BufferedImage(width(), height(), BufferedImage.TYPE_INT_ARGB);
-		
-		for (PackImageData img : _packedImages) {
-			Utils.copyImageRect(image, img.rect().left() + img.image().border(), img.rect().top() + img.image().border(), 
-					img.image().image());
-		}
+		BufferedImage image = packedImage();
 		
 //		drawLeftMaxRects(image);
 		
