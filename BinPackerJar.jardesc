@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="GBK" standalone="no"?>
 <jardesc>
     <jar path="BinPacker/bin/BinPacker.jar"/>
     <options buildIfNeeded="true" compress="true" descriptionLocation="/BinPacker/BinPackerJar.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="true" overwrite="true" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
     <storedRefactorings deprecationInfo="true" structuralOnly="false"/>
     <selectedProjects/>
-    <manifest generateManifest="true" mainClassHandleIdentifier="=BinPacker/src&lt;com.wood9366.game.binpacker{BinPacker.java[BinPacker" manifestLocation="" manifestVersion="1.0" reuseManifest="false" saveManifest="false" usesManifest="true">
+    <manifest generateManifest="true" mainClassHandleIdentifier="=BinPacker/src&lt;com.wood9366.game.binpacker{Launcher.java[Launcher" manifestLocation="" manifestVersion="1.0" reuseManifest="false" saveManifest="false" usesManifest="true">
         <sealing sealJar="false">
             <packagesToSeal/>
             <packagesToUnSeal/>
@@ -12,10 +12,13 @@
     </manifest>
     <selectedElements exportClassFiles="true" exportJavaFiles="false" exportOutputFolder="false">
         <javaElement handleIdentifier="=BinPacker/src&lt;com.wood9366.game.binpacker{Profiler.java"/>
+        <javaElement handleIdentifier="=BinPacker/src&lt;org.json"/>
+        <javaElement handleIdentifier="=BinPacker/src&lt;com.wood9366.game.binpacker{Utils.java"/>
+        <javaElement handleIdentifier="=BinPacker/src&lt;com.wood9366.game.binpacker{Rect.java"/>
+        <javaElement handleIdentifier="=BinPacker/src&lt;com.wood9366.game.binpacker{ISpriteData.java"/>
+        <javaElement handleIdentifier="=BinPacker/src&lt;com.wood9366.game.binpacker{BinPacker.java"/>
         <javaElement handleIdentifier="=BinPacker/src&lt;com.wood9366.game.binpacker{BinData.java"/>
         <javaElement handleIdentifier="=BinPacker/src&lt;com.wood9366.game.binpacker{ImageData.java"/>
-        <javaElement handleIdentifier="=BinPacker/src&lt;org.json"/>
-        <javaElement handleIdentifier="=BinPacker/src&lt;com.wood9366.game.binpacker{Rect.java"/>
-        <javaElement handleIdentifier="=BinPacker/src&lt;com.wood9366.game.binpacker{BinPacker.java"/>
+        <javaElement handleIdentifier="=BinPacker/src&lt;com.wood9366.game.binpacker{Launcher.java"/>
     </selectedElements>
 </jardesc>
