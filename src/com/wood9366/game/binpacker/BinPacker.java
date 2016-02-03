@@ -1,11 +1,13 @@
 package com.wood9366.game.binpacker;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class BinPacker {
-	public Set<BinData> bins() {
+	public List<BinData> bins() {
 		return _bins;
 	}
 	
@@ -119,6 +121,6 @@ public class BinPacker {
 		return Math.min(Math.abs(maxrect.width() - rect.width()), Math.abs(maxrect.height() - rect.height()));
 	}
 	
-	private Set<BinData> _bins = new HashSet<BinData>();
+	private List<BinData> _bins = new ArrayList<BinData>();
 	private Set<ISpriteData> _images = new HashSet<ISpriteData>();
 }
