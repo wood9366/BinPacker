@@ -89,7 +89,7 @@ public class ImageData implements ISpriteData {
 			
 			for (int y = 0; y < image.getHeight(); y++) {
 				for (int x = 0; x < image.getWidth(); x++) {
-					int a = image.getRGB(x, y) & 0xff00000;
+					int a = (image.getRGB(x, y) >> 24) & 0xff;
 
 					if (a > 0) {
 						if (x < left) {
@@ -104,7 +104,7 @@ public class ImageData implements ISpriteData {
 			
 			for (int y = 0; y < image.getHeight(); y++) {
 				for (int x = image.getWidth() - 1; x >= left; x--) {
-					int a = image.getRGB(x, y) & 0xff00000;
+					int a = (image.getRGB(x, y) >> 24) & 0xff;
 
 					if (a > 0) {
 						if (x > right) {
@@ -119,7 +119,7 @@ public class ImageData implements ISpriteData {
 			
 			for (int x = left; x <= right; x++) {
 				for (int y = 0; y < image.getHeight(); y++) {
-					int a = image.getRGB(x, y) & 0xff00000;
+					int a = (image.getRGB(x, y) >> 24) & 0xff;
 
 					if (a > 0) {
 						if (y < top) {
@@ -134,7 +134,7 @@ public class ImageData implements ISpriteData {
 			
 			for (int x = left; x <= right; x++) {
 				for (int y = image.getHeight() - 1; y >= 0; y--) {
-					int a = image.getRGB(x, y) & 0xff00000;
+					int a = (image.getRGB(x, y) >> 24) & 0xff;
 
 					if (a > 0) {
 						if (y > bottom) {
