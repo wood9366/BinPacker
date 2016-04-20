@@ -32,6 +32,8 @@ public class BinPacker {
 	public void export(String outputPath) {
 		if (new File(outputPath).exists()) {
 			for (BinData bin : _bins) {
+				if (bin.empty()) continue;
+				
 				Profiler.Instance().begin("export bin " + Integer.toString(bin.id()));
 				bin.export(outputPath);
 				Profiler.Instance().end("export bin " + Integer.toString(bin.id()));

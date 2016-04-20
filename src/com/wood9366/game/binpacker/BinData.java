@@ -49,6 +49,8 @@ public class BinData {
 	public int id() { return _id; }
 	public int width() { return _width; }
 	public int height() { return _height; }
+	
+	public boolean empty() { return _packedImages.size() <= 0; }
 
 	public List<Rect> maxRects() {
 		return _maxrects;

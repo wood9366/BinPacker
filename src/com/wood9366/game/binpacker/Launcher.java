@@ -67,6 +67,7 @@ public class Launcher {
 							numPacked, sprites.size(), srcPath));
 					System.out.println(String.format("output %d bins into %s", packer.bins().size(), destPath));
 					for (BinData bin : packer.bins()) {
+						if (bin.empty()) continue;
 						System.out.println(String.format("  %s: %d x %d", bin.id(), bin.width(), bin.height()));
 					}
 				} else {
