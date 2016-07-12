@@ -115,7 +115,7 @@ public class BinData {
 		}
 	}
 	
-	private String name() {
+	public String name() {
 		return "sprite" + Integer.toString(_id);
 	}
 	

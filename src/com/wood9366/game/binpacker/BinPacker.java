@@ -1,10 +1,18 @@
 package com.wood9366.game.binpacker;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class BinPacker {
 	public List<BinData> bins() {
@@ -31,12 +39,34 @@ public class BinPacker {
 	
 	public void export(String outputPath) {
 		if (new File(outputPath).exists()) {
+			JSONArray sprites = new JSONArray();
+			
 			for (BinData bin : _bins) {
 				if (bin.empty()) continue;
 				
 				Profiler.Instance().begin("export bin " + Integer.toString(bin.id()));
 				bin.export(outputPath);
 				Profiler.Instance().end("export bin " + Integer.toString(bin.id()));
+				
+				JSONObject sprite = new JSONObject();
+				sprite.put("texture", bin.name() + ".png");
+				sprite.put("config", bin.name() + ".json");
+				
+				sprites.put(sprite);
+			}
+			
+			JSONObject config = new JSONObject();
+			config.put("sprites", sprites);
+			
+			Path configPath = Paths.get(outputPath, "config.json");
+			BufferedWriter o = null;
+			
+			try {
+				o = new BufferedWriter(new FileWriter(configPath.toString()));
+				o.write(config.toString(4));
+				o.close();
+			} catch (IOException e) {
+				System.out.println(e.toString());
 			}
 		} else {
 			System.out.println(" output path [" + outputPath + "] don't exist");
